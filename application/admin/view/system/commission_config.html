@@ -1,0 +1,104 @@
+{extend name="base/base" /}
+{block name="main"}
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>佣金配置</legend>
+</fieldset>
+<div class="layui-row layui-tab-content">
+    <div class="layui-col-md6">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">佣金比例</label>
+                <div class="layui-input-block">
+                    <input type="text" name="commission_rate" required lay-verify="required" placeholder="请输入佣金比例"
+                           value="{$data.value.commission_rate}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">庄家余额</label>
+                <div class="layui-input-block">
+                    <input type="text" name="dealer_balance" required lay-verify="required" placeholder="庄家余额大于等于2000"
+                           value="{$data.value.dealer_balance}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">结算手续费</label>
+                <div class="layui-input-block">
+                    <input type="text" name="settlement_fee" required lay-verify="required" placeholder="请输入结算手续费"
+                           value="{$data.value.settlement_fee}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">庄家盈利</label>
+                <div class="layui-input-block">
+                    <input type="text" name="banker_profit" required lay-verify="required" placeholder="请输入庄家盈利"
+                           value="{$data.value.banker_profit}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">每轮下注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bottom_pour" required lay-verify="required" placeholder="请输入每轮下注比例"
+                           value="{$data.value.bottom_pour}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">提现手续费</label>
+                <div class="layui-input-block">
+                    <input type="text" name="withdraw_commission" required lay-verify="required" placeholder="请输入提现手续费比例"
+                           value="{$data.value.withdraw_commission}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客服QQ</label>
+                <div class="layui-input-block">
+                    <input type="text" name="QQ" required lay-verify="required" placeholder="请输入版权信息"
+                           value="{$data.value.QQ}"  autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客服微信</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wechat" required lay-verify="required" placeholder="请输入版权信息"
+                           value="{$data.value.wechat}" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a class="layui-btn" lay-submit lay-filter="save">立即提交</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{/block}
+{block name="script"}
+<script>
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        //监听提交
+        form.on('submit(save)', function (data) {
+            var obj = $(this);
+            obj.attr("disabled", "disabled").addClass("layui-disabled");
+            $.post("{:url('/admin/commissionConfig')}", data.field, function (data) {
+                var icon = 5;
+                if (data.code) {
+                    icon = 6;
+                }
+                layer.msg(data.msg, {icon: icon, time: 1500}, function () {
+                    if (data.code) {
+                        location.reload();
+                    } else {
+                        obj.removeAttr("disabled").removeClass("layui-disabled");
+                    }
+                });
+            });
+            return false;
+        });
+    });
+</script>
+{/block}
